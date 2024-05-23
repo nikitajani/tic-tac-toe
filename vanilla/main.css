@@ -1,0 +1,9 @@
+#game {
+  border: 1px solid black;
+
+  height: 500px;
+  width: 80%;
+  min-width: 600px;
+  max-width: 1000px;
+  margin: 0px auto;
+}
