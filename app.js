@@ -1,21 +1,50 @@
 const gameBoardUI = document.getElementById("gameBoardUI");
 
-let gameState = [
-  [0, 0, 0],
-  [0, 0, 0],
-  [0, 0, 0],
-];
+const getInitialState = () => {
+  return [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ];
+};
 
+let gameState = getInitialState();
 const turns = [];
-let div = document.createElement("div");
-div.id = "currentTurn";
+const div = document.createElement("div");
 let gameStateLog = [];
 
-initializeBoard();
+div.id = "currentTurn";
+
+const createUIElement = (
+  elementType = "div",
+  attributes = {},
+  children = []
+) => {
+  const element = document.createElement(elementType);
+  Object.entries(attributes).forEach((attr) =>
+    element.setAttribute(attr[0], attr[1])
+  );
+  return element;
+};
+
+const createRow = (row) => {
+  row.reduce((element) => console.log("create row=", row));
+};
+
+const createBoard = (gameStates, boardReference) => {
+  gameStates.reduce((children, row) => {
+    console.log(children, row);
+    createRow(row);
+  });
+  boardReference.append();
+};
+
+createBoard(gameState, gameBoardUI);
 
 function initializeBoard() {
   div.append(`Current Turn: ${getCurrentTurn()}`);
-  gameBoardUI.innerHTML = "";
+  gameBoardUI.innerHTML = null;
+
   for (let i = 0; i < gameState.length; i++) {
     const row = gameState[i];
 
@@ -27,32 +56,19 @@ function initializeBoard() {
     const rowUIWrapper = `<div class="boardRow">${rowUI}</div>`;
     gameBoardUI.innerHTML = gameBoardUI.innerHTML + rowUIWrapper;
   }
-
   gameBoardUI.appendChild(div);
 }
 
 function reInitializeBoard() {
-  gameState = [
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0],
-  ];
+  gameState = getInitialState();
   turns.length = 0;
-  div.innerHTML = "";
+  div.innerHTML = null;
   getCurrentTurn();
   initializeBoard();
 }
 
 function getCurrentTurn() {
-  if (turns.length) {
-    if (turns[turns.length - 1] === "X") {
-      return "O";
-    } else {
-      return "X";
-    }
-  } else {
-    return "X";
-  }
+  return turns.length && turns[turns.length - 1] === "X" ? "O" : "X";
 }
 
 function setPieceValue(i, j) {
@@ -80,14 +96,14 @@ function setPieceValue(i, j) {
     gameStateLog.push([...gameState]);
     console.log("game log==", gameStateLog);
     computeGameState();
-    createLogButton();
+    createLogButton(turns.length - 1);
   }
 }
 
-function createLogButton() {
+function createLogButton(stepCount) {
   let btn = document.createElement("button");
-  btn.append(`Go Back to step ${turns.length}`);
-  btn.addEventListener("click", () => console.log(turns.length));
+  btn.append(`Go Back to step ${stepCount}`);
+  btn.addEventListener("click", () => console.log(stepCount));
   gameBoardUI.appendChild(btn);
 }
 
@@ -146,3 +162,5 @@ function computeGameState() {
     div.animate({ zoom: 1.5 }, 2000).animate({ zoom: 1 });
   }
 }
+
+initializeBoard();
