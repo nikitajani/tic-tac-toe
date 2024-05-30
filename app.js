@@ -15,32 +15,6 @@ let gameStateLog = [];
 
 div.id = "currentTurn";
 
-const createUIElement = (
-  elementType = "div",
-  attributes = {},
-  children = []
-) => {
-  const element = document.createElement(elementType);
-  Object.entries(attributes).forEach((attr) =>
-    element.setAttribute(attr[0], attr[1])
-  );
-  return element;
-};
-
-const createRow = (row) => {
-  row.reduce((element) => console.log("create row=", row));
-};
-
-const createBoard = (gameStates, boardReference) => {
-  gameStates.reduce((children, row) => {
-    console.log(children, row);
-    createRow(row);
-  });
-  boardReference.append();
-};
-
-createBoard(gameState, gameBoardUI);
-
 function initializeBoard() {
   div.append(`Current Turn: ${getCurrentTurn()}`);
   gameBoardUI.innerHTML = null;
@@ -94,17 +68,13 @@ function setPieceValue(i, j) {
     }
     div.innerHTML = `Current Turn: ${getCurrentTurn()}`;
     gameStateLog.push([...gameState]);
-    console.log("game log==", gameStateLog);
     computeGameState();
     createLogButton(turns.length - 1);
   }
 }
 
 function createLogButton(stepCount) {
-  let btn = document.createElement("button");
-  btn.append(`Go Back to step ${stepCount}`);
-  btn.addEventListener("click", () => console.log(stepCount));
-  gameBoardUI.appendChild(btn);
+  //TO DO
 }
 
 function computeGameState() {
